@@ -99,7 +99,7 @@ public class SearchingForRepeatingFiles {
         fileArray.add(desc3);
         fileArray.add(desc4);
         fileArray.add(desc1);
-
+//
         printEqualFile(fileArray);
 
 

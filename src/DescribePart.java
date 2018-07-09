@@ -15,7 +15,7 @@ public  class DescribePart{
         this.repeatPart = repeatPart;
         this.repeatCount = repeatCount;
     }
-
+//
 
     public void incrCount(long increase){
         repeatCount += increase;
