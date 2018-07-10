@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SearchingForRepeatingFiles {
@@ -80,7 +81,7 @@ public class SearchingForRepeatingFiles {
 
 
         String[] testArr = {"lol","1","dSFd","df","dfg","fadf","gog","dGGD","lol","DGg","WGFdf","hfjk","gog","afbdv","gog","FDfef","gog","4r","dhjhgf","erg","ert","rt","uhgf","rgft"};
-
+                String sa ;
                Arrays.stream(testArr)
                 .collect((Collectors.groupingBy(p -> p, Collectors.counting())))
                 .entrySet().stream().filter(t -> t.getValue() > 1)
@@ -101,7 +102,13 @@ public class SearchingForRepeatingFiles {
         fileArray.add(desc1);
 //
         printEqualFile(fileArray);
+        int[] array = {11, 14, 17, 11, 48, 33, 29, 11, 17, 22, 11, 48, 18};
 
-
+        Map<Integer, Long> occurrences = Arrays.stream(array)
+                .boxed()
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()));
+            System.out.println(occurrences);
         }
 }
