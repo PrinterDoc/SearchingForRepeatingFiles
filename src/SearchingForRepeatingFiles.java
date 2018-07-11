@@ -1,6 +1,11 @@
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SearchingForRepeatingFiles {
@@ -76,17 +81,17 @@ public class SearchingForRepeatingFiles {
 
     public static void main(String[] args) {
 
-        //List<String> filesPath =getFilePath("C:\\Users\\user\\Desktop\\SomeDir");
+        List<String> filesPath =getFilePath("C:\\Users\\user\\Desktop\\SomeDir");
         //System.out.println(filesPath);
 
 
-        String[] testArr = {"lol","1","dSFd","df","dfg","fadf","gog","dGGD","lol","DGg","WGFdf","hfjk","gog","afbdv","gog","FDfef","gog","4r","dhjhgf","erg","ert","rt","uhgf","rgft"};
-                String sa ;
+        //String[] testArr = {"lol","1","dSFd","df","dfg","fadf","gog","dGGD","lol","DGg","WGFdf","hfjk","gog","afbdv","gog","FDfef","gog","4r","dhjhgf","erg","ert","rt","uhgf","rgft"};
+         /*       String sa ;
                Arrays.stream(testArr)
                 .collect((Collectors.groupingBy(p -> p, Collectors.counting())))
                 .entrySet().stream().filter(t -> t.getValue() > 1)
                 .forEach(key -> System.out.println(key.getKey() + " " + key.getValue()));
-
+*/
 
             DescribePart desc1 = new DescribePart("lol.txt",5,"dfdf.txt");
           DescribePart desc3 = new DescribePart("lol.txt",5,"dff.txt");
@@ -101,14 +106,50 @@ public class SearchingForRepeatingFiles {
         fileArray.add(desc4);
         fileArray.add(desc1);
 //
-        printEqualFile(fileArray);
-        int[] array = {11, 14, 17, 11, 48, 33, 29, 11, 17, 22, 11, 48, 18};
+       // printEqualFile(fileArray);
+        /*int[] array = {11, 14, 17, 11, 48, 33, 29, 11, 17, 22, 11, 48, 18};
 
         Map<Integer, Long> occurrences = Arrays.stream(array)
                 .boxed()
                 .collect(Collectors.groupingBy(
                         Function.identity(),
                         Collectors.counting()));
-            System.out.println(occurrences);
+                System.out.println(occurrences);
+              */
+
+
+
+
+
+
+        final int BUFFER_SIZE = 512;
+        try {
+            FileInputStream fis = new FileInputStream("C:\\Users\\user\\Desktop\\SomeDir\\1.txt");
+            byte[] bufferPart = new byte[BUFFER_SIZE];
+            Map<String,Long> buffMap = new HashMap<>();
+            int read = 0;
+            while ( (read = fis.read(bufferPart))> 0) {
+              String buffStr = new String(bufferPart,"UTF-8");
+              String[] buffArray = buffStr.split(" ");
+                        Arrays.stream(buffArray)
+                        .collect((Collectors.groupingBy(p -> p, Collectors.counting())))
+                        .entrySet().stream().filter(t -> t.getValue() > 1)
+                        .forEach(key -> buffMap.put(key.getKey(),key.getValue())/*key -> System.out.println(key.getKey() + " " + key.getValue())*/);
+
+
+                Arrays.stream(buffArray)
+                        .collect((Collectors.groupingBy(p -> p, Collectors.counting())))
+                        .entrySet().stream().filter(t -> t.getValue() > 1)
+                        .forEach(/*key -> buffMap.put(key.getKey(),key.getValue())*/key -> System.out.println(key.getKey() + " " + key.getValue()));
+                }
+            System.out.println(buffMap);
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
+    }
 }
