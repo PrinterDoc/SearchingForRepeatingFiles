@@ -90,10 +90,9 @@ public class SearchingForRepeatingFiles {
                 }
             }
             catch(IOException ex){
-
+System.out.print("error");
 
             }
-
 
 
         }
@@ -102,15 +101,11 @@ public class SearchingForRepeatingFiles {
     public static void main(String[] args) {
 
         List<String> filesPath =getFilePath("C:\\Users\\PC\\Desktop\\SomeDir");
-        //System.out.println(filesPath);
-        //FileInputStream fstream = new FileInputStream("C:\\Users\\PC\\Desktop\\SomeDir\\1.txt");
-       //System.out.println("увеличить");
+
 for(String fPath: filesPath) {
     searchParts(fPath);
 }
 //searchParts("C:\\Users\\PC\\Desktop\\SomeDir\\2.txt");
-
-        //System.out.print(repeatCountMap);
 
         for(String repeatPart: repeatCountMap.keySet()){
             HashMap<String, Integer> hashMap = repeatCountMap.get(repeatPart);
