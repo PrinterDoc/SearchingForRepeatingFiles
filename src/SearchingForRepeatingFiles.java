@@ -80,24 +80,25 @@ public class SearchingForRepeatingFiles {
 
 
         for(String repeatPart: repeatCountMap.keySet()){
-            HashMap<String, Integer> hashMap = repeatCountMap.get(repeatPart);
-            HashMap<Integer, ArrayList<String>> result = new LinkedHashMap<Integer, ArrayList<String>>();
+            HashMap<String, Integer> descPartMap = repeatCountMap.get(repeatPart);
+            HashMap<Integer, ArrayList<String>> result = new HashMap<>();
 
-            for (String key : hashMap.keySet()) {
-                ArrayList<String> colName = null;
-                if (!result.containsKey(hashMap.get(key))) {
-                    colName = new ArrayList<String>();
-                    colName.add(key);
-                    result.put(hashMap.get(key), colName);
-                } else {
-                    colName = result.get(hashMap.get(key));
-                    colName.add(key);
-                    result.put(hashMap.get(key), colName);
+            for (String key : descPartMap.keySet()) {
+                ArrayList<String> equalFile = null;
+                if(descPartMap.get(key) >1) {
+                    if (!result.containsKey(descPartMap.get(key))) {
+                        equalFile = new ArrayList<String>();
+                        equalFile.add(key);
+                        result.put(descPartMap.get(key), equalFile);
+                    } else {
+                        equalFile = result.get(descPartMap.get(key));
+                        equalFile.add(key);
+                        result.put(descPartMap.get(key), equalFile);
+                    }
                 }
             }
-
-            for (Integer key : result.keySet()) {
-                if(key>1 && result.get(key).size() >1 )
+                for (Integer key : result.keySet()) {
+                if(result.get(key).size() >1 )
                     {
                         System.out.print("Повторяющаяся часть: "+repeatPart+" Количество повторений: "+ key + " Файлы: " + result.get(key) + "\n");
                     }
