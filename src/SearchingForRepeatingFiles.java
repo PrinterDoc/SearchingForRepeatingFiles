@@ -36,45 +36,22 @@ public class SearchingForRepeatingFiles {
     }
 
 
-   // public static void getRepeatInfo(String pathName){
-        /*
+    public static HashMap<String,HashMap<String,Integer>> repeatCountMap = new HashMap<>();
 
-        Method  search and count repeating part of file and print fileName, repeatPart, repeatCount
+    public static void searchParts(String filePath){
 
-        Input data: path of file for text "C:\\Users\\user\\Desktop\\SomeDir\\1.txt"
-
-                Arrays.stream(testArr)
-                .collect((Collectors.groupingBy(p -> p, Collectors.counting())))
-                .entrySet().stream().filter(t -> t.getValue() > 1)
-                .forEach(key -> System.out.println(key.getKey() + " " + key.getValue()));
-        */
-
-
-
-        public static HashMap<String,HashMap<String,Integer>> repeatCountMap = new HashMap<>();
-
-        public static void searchParts(String filePath){
-
-            try(FileInputStream fis=new FileInputStream(filePath))
+        try(FileInputStream fis=new FileInputStream(filePath))
             {
                 char space = ' ';
                 int read = 0;
                 StringBuilder buffworld = new StringBuilder();
-                //HashMap<String,HashMap<String,Integer>> repeatCountMap = new HashMap<>();
-
                 while ( (read = fis.read())> 0){
-
-
                     if ((char)read != space){
                         buffworld.append((char)read);
                     }
-
-
                     if((char)read == space){
                         String word = buffworld.toString();
                         buffworld.delete(0,buffworld.length());
-                        
-
                         if(!repeatCountMap.containsKey(word)){
                         repeatCountMap.put(word, new HashMap<String,Integer>());
                         repeatCountMap.get(word).put(filePath,1);
@@ -89,29 +66,21 @@ public class SearchingForRepeatingFiles {
                     }
                 }
             }
-            catch(IOException ex){
-System.out.print("error");
-
+            catch(IOException ex){ System.out.print("error"); }
             }
-
-
-        }
 
 
     public static void main(String[] args) {
 
         List<String> filesPath =getFilePath("C:\\Users\\PC\\Desktop\\SomeDir");
 
-for(String fPath: filesPath) {
-    searchParts(fPath);
-}
-//searchParts("C:\\Users\\PC\\Desktop\\SomeDir\\2.txt");
+        for(String fPath: filesPath) {
+            searchParts(fPath);
+        }
+
 
         for(String repeatPart: repeatCountMap.keySet()){
             HashMap<String, Integer> hashMap = repeatCountMap.get(repeatPart);
-            //for (String fileName: repeatCountMap.get(repeatPart).keySet()){
-                //int hashcode = repeatCountMap.get(repeatPart).get(fileName).hashCode();
-                //repeatCountMap.get(repeatPart).values()
             HashMap<Integer, ArrayList<String>> result = new LinkedHashMap<Integer, ArrayList<String>>();
 
             for (String key : hashMap.keySet()) {
@@ -125,28 +94,15 @@ for(String fPath: filesPath) {
                     colName.add(key);
                     result.put(hashMap.get(key), colName);
                 }
-
-
             }
 
             for (Integer key : result.keySet()) {
-                if(key>2 && result.get(key).size() >1 )
+                if(key>1 && result.get(key).size() >1 )
                     {
                         System.out.print("Повторяющаяся часть: "+repeatPart+" Количество повторений: "+ key + " Файлы: " + result.get(key) + "\n");
                     }
                 }
-
-
-
-
-
-        }
-
-
-
-
-
-
+}
 
     }
 }
