@@ -3,22 +3,16 @@ import java.util.*;
 
 public class SearchingForRepeatingFiles {
 
-    public static List<String> getFilePath(String pathName) {
-        /**
-         Method return list of paths of files from directory
-         *
-         Input data: path directory in which searching for files - directoryName
-         *
-         Return data: List of strings describing paths to files in folder
-         */
+    public static List<File> getFiles(String pathName) {
+
         File directoryName = new File(pathName);
         int i = 0;
-        List<String> returnList = new ArrayList<>();
+        List<File> returnList = new ArrayList<>();
         if (directoryName.isDirectory()) {
-            if (directoryName.listFiles().length != 0) {
-                for (File item : directoryName.listFiles()) {
+            if (Objects.requireNonNull(directoryName.listFiles()).length != 0) {
+                for (File item : Objects.requireNonNull(directoryName.listFiles())) {
                     if (item.isFile()) {
-                        returnList.add(i,item.getPath());
+                        returnList.add(i,item);
                         i += 1;
                     } else System.out.println(item.getName() + " не является файлом");
                 }
@@ -27,14 +21,14 @@ public class SearchingForRepeatingFiles {
         return returnList;
     }
 
-    public static TreeMap<String,HashMap<String,Integer>> repeatCountMap = new TreeMap<>();//
+    public static TreeMap<String,HashMap<String,Integer>> repeatCountMap = new TreeMap<>();
 
-    public static void searchParts(String filePath) {
+    public static void searchParts(File file) {
 
-        try (FileInputStream fis = new FileInputStream(filePath)) {
+        try (FileInputStream fis = new FileInputStream(file)) {
            final char SPACE = ' ';
-            int read = 0;
-            StringBuilder wordBuff = new StringBuilder();// word buff
+            int read;
+            StringBuilder wordBuff = new StringBuilder();
             while ((read = fis.read()) > 0) {
                 if ((char) read != SPACE) {
                     wordBuff.append((char) read);
@@ -43,13 +37,13 @@ public class SearchingForRepeatingFiles {
                     String word = wordBuff.toString();
                     wordBuff.delete(0, wordBuff.length());
                     if (!repeatCountMap.containsKey(word)) {
-                        repeatCountMap.put(word, new HashMap<String, Integer>());
-                        repeatCountMap.get(word).put(filePath, 1);
+                        repeatCountMap.put(word, new HashMap<>());
+                        repeatCountMap.get(word).put(file.getName(), 1);
                     } else {
-                        if (!repeatCountMap.get(word).containsKey(filePath)) {
-                            repeatCountMap.get(word).put(filePath, 1);
+                        if (!repeatCountMap.get(word).containsKey(file.getName())) {
+                            repeatCountMap.get(word).put(file.getName(), 1);
                         } else {
-                            repeatCountMap.get(word).put(filePath, repeatCountMap.get(word).get(filePath) + 1);
+                            repeatCountMap.get(word).put(file.getName(), repeatCountMap.get(word).get(file.getName()) + 1);
                         }
                     }
                 }
@@ -57,22 +51,24 @@ public class SearchingForRepeatingFiles {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
     }
 
     public static void main(String[] args) {
 
-        List<String> filesPath =getFilePath("C:\\Users\\PC\\Desktop\\SomeDir");
+        List<File> fileList = getFiles("C:\\Users\\PC\\Desktop\\SomeDir");
 
-        for(String fPath: filesPath) { searchParts(fPath); }
+        for(File file: fileList) { searchParts(file); }
 
-        for(String word: repeatCountMap.keySet()){ // word
+        for(String word: repeatCountMap.keySet()){
             HashMap<String, Integer> descPartMap = repeatCountMap.get(word);
             HashMap<Integer, ArrayList<String>> result = new HashMap<>();
+            //  поиск файлов с одинаковым количеством вхождений слова
             for (String key : descPartMap.keySet()) {
-                ArrayList<String> equalFile = null;
+                ArrayList<String> equalFile;
                 if(descPartMap.get(key) >1) {
                     if (!result.containsKey(descPartMap.get(key))) {
-                        equalFile = new ArrayList<String>();
+                        equalFile = new ArrayList<>();
                         equalFile.add(key);
                         result.put(descPartMap.get(key), equalFile);
                     } else {
@@ -82,6 +78,7 @@ public class SearchingForRepeatingFiles {
                     }
                 }
             }
+                //  вывод списка хотя бы 2х файлов с одинаковым количеством повторений
                 for (Integer key : result.keySet()) {
                 if(result.get(key).size() >1 )
                     {
